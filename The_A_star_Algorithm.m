@@ -1,0 +1,60 @@
+clear;
+
+%% Store initial values
+
+% distances to neighbours of each vertex
+M = [ 0 3 4 4 3 5 ;
+ 3 0 inf inf inf inf ;
+ 4 inf 0 inf inf inf ;
+ 4 inf inf 0 inf inf ;
+ 3 inf inf inf 0 inf ;
+ 5 inf inf inf inf 0 ];
+% start and end points
+s=1;
+z=6;
+
+%
+h=[0;3;8;8;3;0];
+
+% size of M
+n=size(M,1);
+
+%initialise vectors of unvisited and visited vertices.
+vis = zeros(1,n);
+
+%initialise distances stored to each vertex
+dist = Inf(1,n);
+dist(s) = 0;
+
+%initialise distance and heuristic vector
+heur = Inf(1,n);
+heur(s) = 0;
+
+%first visited vertex
+I=s;
+
+%% Run the algorithm
+
+while I~=z %perform iterations of algorithm until end vertex met
+
+neigh=M(I,:); %store vector of neighbouring vertices
+
+for i=1:n
+
+if neigh(i)+dist(I)<dist(i) %test for potential shorter distance
+dist(i)=neigh(i)+dist(I); %update dist where shorter distance found
+heur(i)=dist(i)+h(i); %update heur where shorter distance found
+
+end
+end
+
+vis(I)=inf; %store the visited vertex as infinity
+
+I = find(heur+vis==min(heur+vis));
+I=I(1); %find vertex to be visited
+
+end
+
+%% Present result
+
+fprintf('The shortest path between the selected start and end vertices has a weight of %d units. ',dist(I)) %present shortest path found
